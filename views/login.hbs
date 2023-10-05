@@ -1,0 +1,158 @@
+<section class="alto">
+    <main>
+        <div class="login-container">
+            <h2>LOGIN</h2>
+            <form id="registroForm" onsubmit="enviarDatos(event)">
+                <label class="ancho" for="username">USERNAME:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label class="ancho" for="email">EMAIL:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label class="ancho" for="password">PASSWORD:</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit">Enviar</button>
+
+            </form>
+            <div id="mensajeExito"></div> 
+            <div id="mensajeError"></div>
+        </div>
+    </main>
+</section>
+<script>
+    function enviarDatos(event) {
+        event.preventDefault();  // Evita que el formulario se envíe de forma predeterminada (recarga la página)
+
+        const nombre = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const datos = {
+            nombre,
+            email,
+            password
+        };
+
+        fetch('http://localhost:9003/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+            // Si el login fue exitoso, redirige a una página de éxito
+            const exitoDiv = document.getElementById('mensajeExito');
+            exitoDiv.innerText = data.message;
+            exitoDiv.style.color = 'green';
+            window.location.href = 'exito';  // Redirige solo si es exitoso
+        } else {
+            // Si hubo errores, muestra un mensaje de error en rojo
+            const errorDiv = document.getElementById('mensajeError');
+            errorDiv.innerText = data.message;
+            errorDiv.style.color = 'red';
+            window.location.href = 'error';  // Redirige solo si hay errores
+        }
+            })
+            .catch(error => console.error('Error al enviar datos:', error));
+    }
+
+</script>
+<STyle>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: black;
+        color: beige;
+    }
+
+    .alto {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        /* Ajusta la altura al 100% del viewport */
+    }
+
+    .login-container {
+        width: 300px;
+
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .login-container h2 {
+        margin-bottom: 20px;
+    }
+
+    .ancho {
+        display: block;
+        margin-bottom: 5px;
+        text-align: left;
+    }
+
+    #login-form input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    #login-form button {
+        width: 100%;
+        padding: 10px;
+        background-color: #2a1ed6;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #login-form button:hover {
+        background-color: #9317b3;
+    }
+
+    #error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+
+
+
+
+    h2 {
+        text-align: center;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    input[type="radio"] {
+        margin-right: 5px;
+    }
+
+    textarea {
+        height: 100px;
+    }
+</STyle>
